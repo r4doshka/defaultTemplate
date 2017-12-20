@@ -1,23 +1,50 @@
 body{
   font-family: $font-primary;
-
-}
-*{
-  transition: all 0.4s;
+  -webkit-font-smoothing: antialiased;
+  font-smooth: always;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .flexbox{
   display: flex;
 }
+.flexbox-inline{
+  display: inline-flex;
+}
+.direction-column{
+  flex-direction: column;
+}
+.direction-row{
+  flex-direction: row;
+}
+.flexwrap-wrap{
+  flex-wrap: wrap;
+}
+.align-start{
+  align-items: flex-start;
+}
 .align-center{
   align-items: center;
+}
+.align-end{
+  align-items: flex-end;
+}
+.justify-start{
+  justify-content: flex-start;
+}
+.justify-center{
+  justify-content: center;
 }
 .justify-between{
   justify-content: space-between;
 }
-.flexwrap{
-  flex-wrap: wrap;
+.justify-around{
+  justify-content: space-around;
 }
+.justify-end{
+  justify-content: flex-end;
+}
+
 .nopadding{
   padding: 0;
 }
