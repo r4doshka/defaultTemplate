@@ -3,6 +3,7 @@ var webpack = require('webpack'),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
     BrowserSyncPlugin = require('browser-sync-webpack-plugin'),
     FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin'),
+    HtmlWebpackPlugin = require('html-webpack-plugin'),
     SpritesmithPlugin = require('webpack-spritesmith');
 
 var testFolder = path.join(__dirname, '/public');
@@ -13,7 +14,7 @@ var files = fs.readdirSync(testFolder).filter(function (file) {
     return './public/' + file;
 });
 
-var entries = ['./app/scss/index.scss', './app/index.js'].concat(files);
+var entries = ['./app/assets/scss/index.scss', './app/index.js'].concat(files);
 
 module.exports = {
     devtool: 'source-map',
@@ -96,6 +97,20 @@ module.exports = {
         modules: ["node_modules", "spritesmith-generated"]
     },
     plugins: [
+        new HtmlWebpackPlugin({
+             title: 'My Awesome application',
+             myPageHeader: 'Hello World',
+            filename: "../index.html",
+            // hash: true,
+             template: path.resolve(__dirname, 'app/components/index.html'),
+        }),
+        new HtmlWebpackPlugin({
+            title: 'My Awesome application',
+            myPageHeader: 'Hello World',
+            filename: "../settings.html",
+           // hash: true,
+            template: path.resolve(__dirname, 'app/components/settings.html'),
+       }),
         new webpack.ProvidePlugin({
             $: "jquery",
             jquery: "jquery",
@@ -113,12 +128,12 @@ module.exports = {
         }),
         new SpritesmithPlugin({
             src: {
-                cwd: path.resolve(__dirname, 'app/icons'),
+                cwd: path.resolve(__dirname, 'app/assets/images/sprite'),
                 glob: '*.png'
             },
             target: {
-                image: path.resolve(__dirname, 'app/spritesmith-generated/sprite.png'),
-                css: path.resolve(__dirname, 'app/spritesmith-generated/sprite.scss')
+                image: path.resolve(__dirname, 'app/images/spritesmith-generated/sprite.png'),
+                css: path.resolve(__dirname, 'app/images/spritesmith-generated/sprite.scss')
             },
             apiOptions: {
                 cssImageRef: "~sprite.png"

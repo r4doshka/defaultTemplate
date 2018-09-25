@@ -1,2 +1,2 @@
-import './modules/common';
+import './assets/js/common';
 
