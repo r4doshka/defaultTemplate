@@ -1,10 +1,22 @@
-@import "variables";
+/* vendor */
 @import "../spritesmith-generated/sprite";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap";
-@import "fonts";
-@import "core";
-@import "typografics";
-@import "controls";
-@import "header";
-@import "footer";
-@import 'mixins';
+
+/* common */
+@import "./fonts";
+@import "./common/variables";
+@import "~bootstrap/scss/bootstrap";
+@import "./common/spacing";
+@import "./common/core";
+@import "./common/typografics";
+@import "./common/colors";
+
+/* mixins */
+@import "./mixins/mixins";
+
+/* blocks */
+@import "./blocks/header";
+@import "./blocks/footer";
+
+/* components */
+@import "./components/controls";
+

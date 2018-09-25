@@ -1,2 +1,2 @@
-import './modules/scriptName';
+import './modules/common';
 

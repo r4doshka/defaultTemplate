@@ -5,6 +5,10 @@ body{
   -moz-osx-font-smoothing: grayscale;
 }
 
+body.noscroll {
+  overflow: hidden;
+}
+
 .flexbox{
   display: flex;
 }

@@ -1,4 +1,6 @@
-.btn{
+$block: '.btn';
+
+#{$block} {
   &:hover,
   &:focus,
   &:active,
@@ -6,7 +8,10 @@
     outline:none;
     box-shadow: none;
   }
-  &.btn-primary {
+  &#{$block} {
+    &_primary {
+
+    }
 
   }
 }

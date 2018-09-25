@@ -1,0 +1,18 @@
+$container-max-widths: (
+  sm: 720px,
+  md: 960px,
+  lg: 1170px,
+  xl: 1410px
+);
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 768px,
+  md: 992px,
+  lg: 1200px,
+  xl: 1440px
+);
+
+$font-primary: 'sans-serif';
+$shadow_button_hover: 0 20px 38px rgba(0, 0, 0, 0.16);
+$timing_function_btn_hover:  cubic-bezier(0.25, 1, 0.33, 1);
