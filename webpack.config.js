@@ -1,20 +1,37 @@
-var webpack = require('webpack'),
-    path = require('path'),
-    ExtractTextPlugin = require("extract-text-webpack-plugin"),
-    BrowserSyncPlugin = require('browser-sync-webpack-plugin'),
-    FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin'),
-    HtmlWebpackPlugin = require('html-webpack-plugin'),
-    SpritesmithPlugin = require('webpack-spritesmith');
+const webpack = require('webpack');
+const path = require('path');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const SpritesmithPlugin = require('webpack-spritesmith');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var testFolder = path.join(__dirname, '/public');
-var fs = require('fs');
-var files = fs.readdirSync(testFolder).filter(function (file) {
+const testFolder = path.join(__dirname, './app');
+const fs = require('fs');
+
+const files = fs.readdirSync(testFolder).filter(function (file) {
     return (/\.(html)$/i).test(file);
 }).map(function (file) {
-    return './public/' + file;
+    return './app/' + file;
 });
 
-var entries = ['./app/assets/scss/index.scss', './app/index.js'].concat(files);
+const entries = ['./app/assets/scss/index.scss', './app/index.js']
+
+function generateHtmlPlugins(templateDir) {
+    const templateFiles = fs.readdirSync(path.resolve(__dirname, templateDir));
+    return templateFiles.map(item => {
+      const parts = item.split('.');
+      const name = parts[0];
+      const extension = parts[1];
+      return new HtmlWebpackPlugin({
+        filename: `${name}.html`,
+        template: path.resolve(__dirname, `${templateDir}/${name}.${extension}`),
+        inject: false,
+      })
+    })
+  }
+
+  const htmlPlugins = generateHtmlPlugins('./app/views')
 
 module.exports = {
     devtool: 'source-map',
@@ -22,14 +39,18 @@ module.exports = {
         styles: entries
     },
     output: {
-        path: path.join(__dirname, '/public/bundle'),
-        filename: 'bundle.js',
+        path: path.join(__dirname, 'dist'),
+        filename: 'bundle/bundle.js',
         publicPath: '../bundle/',
         library: 'jQuery'
     },
     module: {
         loaders: [
-            { test: /\.html$/, loader: 'raw-loader' },
+            {
+                test: /\.html$/,
+                include: path.resolve(__dirname, './app/includes'),
+                use: ['raw-loader']
+            },
             {
                 test: /\.js$/,
                 exclude: /(node_modules)/,
@@ -88,40 +109,27 @@ module.exports = {
                 loader: ExtractTextPlugin.extract(
                     {
                         fallback: "style-loader",
-                        use: "css-loader?sourceMap!postcss-loader?sourceMap!resolve-url-loader!sass-loader?sourceMap"
+                        use: "css-loader?sourceMap!postcss-loader?sourceMap!resolve-url-loader!sass-loader?sourceMap",
                     }),
             },
+
         ]
     },
     resolve: {
         modules: ["node_modules", "spritesmith-generated"]
     },
     plugins: [
-        new HtmlWebpackPlugin({
-             title: 'My Awesome application',
-             myPageHeader: 'Hello World',
-            filename: "../index.html",
-            // hash: true,
-             template: path.resolve(__dirname, 'app/components/index.html'),
-        }),
-        new HtmlWebpackPlugin({
-            title: 'My Awesome application',
-            myPageHeader: 'Hello World',
-            filename: "../settings.html",
-           // hash: true,
-            template: path.resolve(__dirname, 'app/components/settings.html'),
-       }),
         new webpack.ProvidePlugin({
             $: "jquery",
             jquery: "jquery",
             "window.jQuery": "jquery",
             jQuery:"jquery"
         }),
-        new ExtractTextPlugin({filename: "../css/index.css", allChunks: true}),
+        new ExtractTextPlugin({filename: "./css/index.css", allChunks: true}),
         new BrowserSyncPlugin({
             host: 'localhost',
             port: 3000,
-            server: { baseDir: ['public'] }
+            server: { baseDir: ['dist'] }
         }),
         new FriendlyErrorsWebpackPlugin({
             clearConsole: true
@@ -139,5 +147,5 @@ module.exports = {
                 cssImageRef: "~sprite.png"
             }
         })
-    ]
+    ].concat(htmlPlugins)
 }

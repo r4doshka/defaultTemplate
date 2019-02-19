@@ -1,0 +1,13 @@
+<% var data = {
+  title: "Template",
+}; %>
+<%= _.template(require('./../includes/header.html'))(data) %>
+
+<header>
+  header
+</header>
+
+<div class="container">
+  <p>hello world!</p>
+</div>
+<%= _.template(require('./../includes/footer.html'))()%>
