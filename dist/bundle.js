@@ -61,7 +61,7 @@ var jQuery =
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "../bundle/";
+/******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 4);
@@ -92,7 +92,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 const common = () => {
-  console.log('tyt');
   //anchors
   __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.anchor').on('click', function (e) {
     e.preventDefault();

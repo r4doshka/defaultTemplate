@@ -1,7 +1,7 @@
 <% var data = {
   title: "Template",
 }; %>
-<%= _.template(require('./../includes/header.html'))(data) %>
+<%= _.template(require('html-loader!../includes/header.html'))(data) %>
 
 <header>
   header
@@ -10,4 +10,4 @@
 <div class="container">
   <p>hello world!</p>
 </div>
-<%= _.template(require('./../includes/footer.html'))()%>
+<%= require('html-loader!../includes/footer.html') %>
