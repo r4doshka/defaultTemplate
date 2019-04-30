@@ -8,7 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const fs = require('fs');
 
-const entries = ['./app/assets/scss/index.scss', './app/index.js']
+const entries = ['./app/index.js', './app/assets/scss/index.scss' ]
 
 function generateHtmlPlugins(templateDir) {
   const templateFiles = fs.readdirSync(path.resolve(__dirname, templateDir));
@@ -90,6 +90,14 @@ module.exports = {
           mimetype: 'application/octet-stream',
           limit: 300000
         }
+      },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract(
+          {
+            fallback: "style-loader",
+            use: "css-loader?sourceMap!postcss-loader?sourceMap!resolve-url-loader!sass-loader?sourceMap",
+          }),
       },
       {
         test: /\.scss$/,
