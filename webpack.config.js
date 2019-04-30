@@ -1,10 +1,12 @@
 const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const SpritesmithPlugin = require('webpack-spritesmith');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserJSPlugin = require('terser-webpack-plugin');
 
 const fs = require('fs');
 
@@ -27,6 +29,9 @@ function generateHtmlPlugins(templateDir) {
 const htmlPlugins = generateHtmlPlugins('./app/views')
 
 module.exports = {
+  optimization: {
+    minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
+  },
   devtool: 'source-map',
   entry: {
     styles: entries
@@ -36,8 +41,13 @@ module.exports = {
     filename: 'bundle.js',
     library: 'jQuery'
   },
+  devServer: {
+   contentBase: './dist',
+   compress: true,
+   port: 3000
+  },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
@@ -92,22 +102,20 @@ module.exports = {
         }
       },
       {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract(
+        test: /\.(sa|sc|c)ss$/,
+        use: [
           {
-            fallback: "style-loader",
-            use: "css-loader?sourceMap!postcss-loader?sourceMap!resolve-url-loader!sass-loader?sourceMap",
-          }),
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              fallback: "style-loader",
+              use: "css-loader?sourceMap!postcss-loader?sourceMap!resolve-url-loader!sass-loader?sourceMap",
+            }
+          },
+          'css-loader',
+          'postcss-loader',
+          'sass-loader',
+        ]
       },
-      {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract(
-          {
-            fallback: "style-loader",
-            use: "css-loader?sourceMap!postcss-loader?sourceMap!resolve-url-loader!sass-loader?sourceMap",
-          }),
-      },
-
     ]
   },
   resolve: {
@@ -120,12 +128,7 @@ module.exports = {
       "window.jQuery": "jquery",
       jQuery: "jquery"
     }),
-    new ExtractTextPlugin({ filename: "./index.css", allChunks: true }),
-    new BrowserSyncPlugin({
-      host: 'localhost',
-      port: 3000,
-      server: { baseDir: ['dist'] }
-    }),
+    new MiniCssExtractPlugin({ filename: "./index.css", allChunks: true }),
     new FriendlyErrorsWebpackPlugin({
       clearConsole: true
     }),
